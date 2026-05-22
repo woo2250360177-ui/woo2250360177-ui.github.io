@@ -4,39 +4,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人主页</title>
+    <title>Woo 的个人主页</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
-            color: #333;
+        /* 现代现代 UI 变量设计 */
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --primary-color: #3b82f6;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
 
-        h1 {
-            color: #24292f;
+        /* 暗黑模式变量 */
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary-color: #60a5fa;
+            --border-color: #334155;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 顶部导航与主题切换 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .theme-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+        }
+
+        .theme-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* 个人简介区（花哨特效） */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .avatar-placeholder {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.5);
+        }
+
+        .profile-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 动态打字机效果 */
+        .typing-text {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            border-right: 2px solid var(--primary-color);
+            white-space: nowrap;
+            width: fit-content;
+            margin: 0 auto;
+            animation: blink 0.75s step-end infinite;
+        }
+
+        /* 分块布局 */
+        .section-title {
+            font-size: 1.5rem;
+            margin: 40px 0 20px;
+            position: relative;
+            padding-left: 12px;
+        }
+
+        .section-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 20%;
+            height: 60%;
+            width: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* 网格卡片（完善功能布局） */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
 
         .card {
-            border: 1px solid #e1e4e8;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* 标签组件 */
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tag {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary-color);
+            padding: 4px 10px;
             border-radius: 6px;
-            padding: 20px;
-            margin-top: 20px;
-            background-color: #fafbfc;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* 动画定义 */
+        @keyframes blink {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: var(--primary-color);
+            }
         }
     </style>
 </head>
 
 <body>
-    <h1>你好，欢迎来到我的个人主页！</h1>
-    <p>这是一个从零开始搭建的网站，未来我会在这里分享我的学习笔记、项目经历和生活思考。</p>
 
-    <div class="card">
-        <h3>关于我</h3>
-        <p>目前正在探索数据科学与算法，喜欢用代码解决一些有趣的小问题。</p>
+    <div class="container">
+        <header>
+            <div style="font-weight: bold; font-size: 1.2rem;">✨ Portfolio</div>
+            <button class="theme-btn" id="themeToggle">🌓 切换模式</button>
+        </header>
+
+        <section class="profile-section">
+            <div class="avatar-placeholder">W</div>
+            <h1>你好，我是 Woo 👋</h1>
+            <div class="typing-text" id="typing">正在探索数据科学、算法与有趣的逻辑...</div>
+        </section>
+
+        <h2 class="section-title">💻 技术栈 & 研究兴趣</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>数据处理 & 算法</h3>
+                <p>擅长利用 Python 进行自动化脚本编写、数据预处理，对经典的机器学习算法保持浓厚兴趣。</p>
+                <div class="tag-container">
+                    <span class="tag">Python</span>
+                    <span class="tag">Scikit-Learn</span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>前沿交叉探索</h3>
+                <p>关注交叉学科的数据处理与算法实现，热衷于用高效的代码逻辑来解决实际问题。</p>
+                <div class="tag-container">
+                    <span class="tag">数据分析</span>
+                    <span class="tag">算法优化</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">🚀 个人项目展示</h2>
+        <div class="grid">
+            <div class="card" style="grid-column: span 1;">
+                <h3>自动化图像编译工具</h3>
+                <p>基于 Python 开发的小工具，能够自动请求并捕获连续的图像流，一键无损打包合并输出为规范的 PDF 文档。</p>
+                <div class="tag-container">
+                    <span class="tag">Requests</span>
+                    <span class="tag">Pillow</span>
+                    <span class="tag">效率工具</span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>更多项目加载中...</h3>
+                <p>未来在这里会同步更多有趣的 dry lab 算法项目以及开源的小工具，欢迎持续关注。</p>
+                <div class="tag-container">
+                    <span class="tag">Markdown</span>
+                    <span class="tag">Git</span>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 Woo. Powered by GitHub Pages.</p>
+        </footer>
     </div>
+
+    <script>
+        // 1. 暗黑模式切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        });
+
+        // 2. 简单的动态打字机文本效果
+        const words = ["正在探索数据科学与核心算法...", "热衷于用代码解决实际效率问题...", "欢迎来到我的数字世界！"];
+        let i = 0;
+        let timer;
+        const typingElement = document.getElementById('typing');
+
+        function rotateText() {
+            typingElement.innerText = words[i];
+            i = (i + 1) % words.length;
+        }
+        // 每 4 秒换一句话
+        setInterval(rotateText, 4000);
+    </script>
 </body>
 
 </html>
